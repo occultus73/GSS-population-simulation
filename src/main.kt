@@ -1,8 +1,8 @@
-import java.io.*
-import java.lang.Exception
+import java.io.BufferedReader
+import java.io.FileReader
 
-private const val SURVEY_YEAR = 0
-private const val YEAR_BORN = 1
+private const val SURVEY_YEAR = 0  // ranges from 1972 to 2018
+private const val YEAR_BORN = 1  // ranges from 1883 to 1977
 private const val MALE = 2
 private const val FEMALE = 3
 private const val FEMALE_OVER_41 = 4
@@ -50,7 +50,7 @@ private const val GOVERNMENT_SHOULD_IMPROVE_STANDARD_OF_LIVING = 45
 private const val GOVERNMENT_SHOULD_DO_MORE = 46
 private const val GOVERNMENT_SHOULD_HELP_PAY_FOR_MEDICAL_CARE = 47
 private const val GOVERNMENT_SHOULD_AID_BLACKS = 48
-private const val ABORTION_OK = 49
+private const val ABORTION_OK = 49  // ranges from 6 to 12
 private const val CAUSE_OF_RACE_DIFFERENCES_DISCRIMINATION = 50
 private const val CAUSE_OF_RACE_DIFFERENCES_INBORN = 51
 private const val CAUSE_OF_RACE_DIFFERENCES_EDUCATION = 52
@@ -149,17 +149,53 @@ private const val TAKE_ACTIVE_PART_IN_WORLD_AFFAIRS = 144
 
 
 fun main() {
-    loadFertilityData()
+    val femalesOverForty = loadFemalesOverForty(ABORTION_OK)
+    for(year in 1972 until 2019) {
+        val sample = femalesOverForty.filter { it.surveyYear == year }
+        if(sample.isEmpty()) continue
+        println("$year average for trait: " + "%.2f".format(sample.traitAverage()))
+
+        val simulation = Simulation(sample)
+    }
 }
 
-fun loadFertilityData() {
-    var count = 0
+fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableListOf<FemaleOverForty>().also { list ->
     val fileReader = BufferedReader(FileReader("GSS_fertility_data.csv"))
     var line: String? = fileReader.readLine()
+    var count = 0
     while (line != null) {
+        count++
         val tokens = line.split(",")
+        if (tokens[FEMALE_OVER_41].toIntOrNull() == 1
+            && tokens[CHILDREN_OF_FEMALE_OVER_41].isNotEmpty()
+            && tokens[trait].isNotEmpty()
+        ) {
+            try {
+                list.add(
+                    FemaleOverForty(
+                        surveyYear = tokens[SURVEY_YEAR].toInt(),
+                        yearBorn = tokens[YEAR_BORN].toInt(),
+                        children = tokens[CHILDREN_OF_FEMALE_OVER_41].toInt(),
+
+                        trait = tokens[trait].toInt()
+                    )
+                )
+            } catch (t: Throwable) {
+                println("Caught exception reading line: $count")
+                t.printStackTrace()
+            }
+
+        }
         line = fileReader.readLine()
     }
     fileReader.close()
+}
 
+private fun List<FemaleOverForty>.traitAverage(): Double{
+    var average = 0.0
+    forEach {
+        average += it.trait
+    }
+    average /= size
+    return average
 }
