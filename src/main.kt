@@ -149,17 +149,26 @@ private const val TAKE_ACTIVE_PART_IN_WORLD_AFFAIRS = 144
 
 
 fun main() {
-    val femalesOverForty = loadFemalesOverForty(ABORTION_OK)
-    for(year in 1972 until 2019) {
+    val femalesOverForty = loadFemalesOverForty(TOLERANCE_HOMOSEXUAL)
+    for (year in 1972 until 2019) {
         val sample = femalesOverForty.filter { it.surveyYear == year }
-        if(sample.isEmpty()) continue
-        println("$year average for trait: " + "%.2f".format(sample.traitAverage()))
-
-        val simulation = Simulation(sample)
+        if (sample.isEmpty()) continue
+        analyzeSample(year, sample)
     }
 }
 
-fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableListOf<FemaleOverForty>().also { list ->
+private fun analyzeSample(year: Int, sample: List<FemaleOverForty>) {
+    println("SURVEY $year average for trait: " + "%.2f".format(sample.traitAverage()))
+    val simulator = Simulator(sample)
+    for (generation in 1 until 3) {
+        if (!simulator.hasNext()) break
+        val nextGeneration = simulator.next()
+        println("${year + 41 * generation} average for trait: " + "%.2f".format(nextGeneration.traitAverage()))
+    }
+    println("###################################\n")
+}
+
+private fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableListOf<FemaleOverForty>().also { list ->
     val fileReader = BufferedReader(FileReader("GSS_fertility_data.csv"))
     var line: String? = fileReader.readLine()
     var count = 0
@@ -175,9 +184,8 @@ fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableListOf<Fema
                     FemaleOverForty(
                         surveyYear = tokens[SURVEY_YEAR].toInt(),
                         yearBorn = tokens[YEAR_BORN].toInt(),
-                        children = tokens[CHILDREN_OF_FEMALE_OVER_41].toInt(),
-
-                        trait = tokens[trait].toInt()
+                        daughters = tokens[CHILDREN_OF_FEMALE_OVER_41].toFloat() / 2,
+                        trait = tokens[trait].toFloat()
                     )
                 )
             } catch (t: Throwable) {
@@ -191,7 +199,7 @@ fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableListOf<Fema
     fileReader.close()
 }
 
-private fun List<FemaleOverForty>.traitAverage(): Double{
+private fun List<FemaleOverForty>.traitAverage(): Double {
     var average = 0.0
     forEach {
         average += it.trait
