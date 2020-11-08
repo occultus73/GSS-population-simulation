@@ -149,7 +149,8 @@ private const val TAKE_ACTIVE_PART_IN_WORLD_AFFAIRS = 144
 
 
 fun main() {
-    val femalesOverForty = loadFemalesOverForty(TOLERANCE_HOMOSEXUAL)
+    val femalesOverForty = loadFemalesOverForty(PREMARITAL_SEX_OK)
+    println("\nTrait averages range from: ${femalesOverForty.minBy { it.trait }?.trait} TO ${femalesOverForty.maxBy { it.trait }?.trait}\n\n")
     for (year in 1972 until 2019) {
         val sample = femalesOverForty.filter { it.surveyYear == year }
         if (sample.isEmpty()) continue
