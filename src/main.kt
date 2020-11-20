@@ -146,6 +146,12 @@ private const val INCOME_GAPS_TOO_BIG = 141
 private const val GOVERNMENT_REDUCE_INCOME_GAPS = 142
 private const val MEN_OVERWORKING_BAD_FOR_FAMILY = 143
 private const val TAKE_ACTIVE_PART_IN_WORLD_AFFAIRS = 144
+private const val MARRIAGE_CONDITION = 145
+private const val MARRIAGE_TYPE = 146
+private const val AGE_AT_FIRST_MARRIAGE = 147
+private const val DIVORCED = 148
+private const val WIDOWED = 149
+private const val AGE_OF_FIRST_CHILD = 150
 
 
 fun main() {
