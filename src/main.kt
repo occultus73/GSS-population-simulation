@@ -196,7 +196,10 @@ private fun loadFemalesOverForty(trait: Int): List<FemaleOverForty> = mutableLis
 
         }
         line = fileReader.readLine()
+        println(tokens.size)
+        println(tokens)
     }
+
     fileReader.close()
 }
 
