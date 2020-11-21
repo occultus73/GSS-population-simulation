@@ -155,7 +155,7 @@ internal object DataLoader {
     const val WIDOWED = 149
     const val AGE_AT_FIRST_CHILD = 150
 
-    fun loadSample(trait: Int): List<Person> = mutableListOf<Person>().also { list ->
+    fun loadSample(traitToStudy: Int): List<Person> = mutableListOf<Person>().also { list ->
         val fileReader = BufferedReader(FileReader("GSS_fertility_data.csv"))
         var line: String? = fileReader.readLine()
         var count = 0
@@ -166,7 +166,7 @@ internal object DataLoader {
                 && tokens[AGE_AT_FIRST_CHILD] != "NA"
                 && tokens[AGE_AT_FIRST_CHILD] != "DK"
                 && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_FEMALE_OVER_41].toInt() > 0)
-                && tokens[trait].isNotEmpty()
+                && tokens[traitToStudy].isNotEmpty()
             ) {
                 try {
                     list.add(
@@ -174,7 +174,7 @@ internal object DataLoader {
                             yearBorn = tokens[YEAR_BORN].toInt(),
                             numberOfChildren = tokens[CHILDREN_OF_FEMALE_OVER_41].toFloat() / 2,
                             ageAtFirstChild = tokens[AGE_AT_FIRST_CHILD].toIntOrNull() ?: 0,
-                            trait = tokens[trait].toDouble()
+                            trait = tokens[traitToStudy].toDouble()
                         )
                     )
                 } catch (t: Throwable) {
@@ -186,7 +186,7 @@ internal object DataLoader {
                 && tokens[AGE_AT_FIRST_CHILD] != "NA"
                 && tokens[AGE_AT_FIRST_CHILD] != "DK"
                 && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_MALE_OVER_44].toInt() > 0)
-                && tokens[trait].isNotEmpty()
+                && tokens[traitToStudy].isNotEmpty()
             ) {
                 try {
                     list.add(
@@ -194,7 +194,7 @@ internal object DataLoader {
                             yearBorn = tokens[YEAR_BORN].toInt(),
                             numberOfChildren = tokens[CHILDREN_OF_MALE_OVER_44].toFloat() / 2,
                             ageAtFirstChild = tokens[AGE_AT_FIRST_CHILD].toIntOrNull() ?: 0,
-                            trait = tokens[trait].toDouble()
+                            trait = tokens[traitToStudy].toDouble()
                         )
                     )
                 } catch (t: Throwable) {
