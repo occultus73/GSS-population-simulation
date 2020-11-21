@@ -1,28 +1,17 @@
-internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : Iterator<Double> {
+internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : Iterator<List<Person>> {
 
     private var currentPopulation = startingPopulation.toMutableList()
 
     private var currentYear = startingYear - 1
 
-    override fun next(): Double {
+    override fun next(): List<Person> {
         currentYear++
         currentPopulation.toList().forEach { addChildrenToPopulation(it) }
         currentPopulation.removeIf { it.hasDied(currentYear) }
-        return currentPopulation.traitAverage()
+        return currentPopulation.filter{ it.isAdult(currentYear) }
     }
 
     override fun hasNext() = currentPopulation.isNotEmpty()
-
-    fun numberOfAdults() = currentPopulation.count { it.isAdult(currentYear) }
-
-    private fun List<Person>.traitAverage(): Double {
-        var average = 0.0
-        filter { it.isAdult(currentYear) }.forEach {
-            average += it.trait
-        }
-        average /= numberOfAdults()
-        return average
-    }
 
     private fun addChildrenToPopulation(mother: Person) {
         mother.children.filter { it.hasBorn(currentYear) }.forEach { child ->

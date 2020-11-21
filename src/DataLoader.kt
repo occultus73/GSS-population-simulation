@@ -156,6 +156,7 @@ internal object DataLoader {
     const val AGE_AT_FIRST_CHILD = 150
 
     fun loadSample(traitToStudy: Int): List<Person> = mutableListOf<Person>().also { list ->
+        println("Loading Sample For Trait: $traitToStudy")
         val fileReader = BufferedReader(FileReader("GSS_fertility_data.csv"))
         var line: String? = fileReader.readLine()
         var count = 0
@@ -167,6 +168,7 @@ internal object DataLoader {
                 && tokens[AGE_AT_FIRST_CHILD] != "DK"
                 && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_FEMALE_OVER_41].toInt() > 0)
                 && tokens[traitToStudy].isNotEmpty()
+                && tokens[SURVEY_YEAR].toInt() == 2018
             ) {
                 try {
                     list.add(
@@ -187,6 +189,7 @@ internal object DataLoader {
                 && tokens[AGE_AT_FIRST_CHILD] != "DK"
                 && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_MALE_OVER_44].toInt() > 0)
                 && tokens[traitToStudy].isNotEmpty()
+                && tokens[SURVEY_YEAR].toInt() == 2018
             ) {
                 try {
                     list.add(
