@@ -1,6 +1,6 @@
 import kotlin.random.Random
 
-internal data class Person(
+internal class Person(
     val yearBorn: Int,
     val numberOfChildren: Float,
     val ageAtFirstChild: Int,

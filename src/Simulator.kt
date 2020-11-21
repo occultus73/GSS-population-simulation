@@ -1,6 +1,6 @@
 internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : Iterator<List<Person>> {
 
-    private var currentPopulation = startingPopulation.toMutableList()
+    private var currentPopulation = startingPopulation.toMutableSet()
 
     private var currentYear = startingYear - 1
 
@@ -13,9 +13,9 @@ internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : 
 
     override fun hasNext() = currentPopulation.isNotEmpty()
 
-    private fun addChildrenToPopulation(mother: Person) {
-        mother.children.filter { it.hasBorn(currentYear) }.forEach { child ->
-            if (!currentPopulation.contains(child)) currentPopulation.add(child)
+    private fun addChildrenToPopulation(parent: Person) {
+        parent.children.filter { it.hasBorn(currentYear) }.forEach { child ->
+            currentPopulation.add(child)
             addChildrenToPopulation(child)
         }
     }

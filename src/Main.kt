@@ -1,5 +1,9 @@
 import AnalyticMethods.hasTrait
+import AnalyticMethods.traitAverage
 import DataLoader.ABORTION_OK
+import DataLoader.AGE_AT_FIRST_CHILD
+import DataLoader.AGE_AT_FIRST_MARRIAGE
+import DataLoader.CHILDREN_OF_MALE_OVER_44
 import DataLoader.EXTRAMARITAL_SEX_OK
 import DataLoader.FAVOUR_SEX_EDUCATION
 import DataLoader.FAVOUR_SPANKING
@@ -14,6 +18,7 @@ import DataLoader.MISCEGENATION_OK
 import DataLoader.MOTHER_WORKING_DOES_NOT_HURT_CHILDREN
 import DataLoader.PREMARITAL_SEX_OK
 import DataLoader.RAISE_IMMIGRATION
+import DataLoader.STRENGTH_OF_RELIGIOUS_COMMITMENT
 import DataLoader.TOLERANCE_HOMOSEXUAL
 import DataLoader.WOMEN_SHOULD_WORK
 import DataLoader.YEARS_IN_SCHOOL
@@ -25,16 +30,17 @@ const val DOOMSDAY = 2100
 
 fun main() {
     // See DataLoader.kt for list of traits you can study - note: only works on the number columns.
-    val sample = loadSample(traitToStudy = FUNDAMENTALIST)
+    val sample = loadSample(traitToStudy = AGE_AT_FIRST_CHILD)
     val simulator = Simulator(CURRENT_YEAR, sample)
-    val fileWriter = FileWriter("FUNDAMENTALIST.csv")
+//    println("Maximum trait in sample is: ${sample.maxByOrNull { it.trait }}")
+//    println("Minimum trait in sample is: ${sample.minByOrNull { it.trait }}")
+//    return
+    val fileWriter = FileWriter("AGE_AT_FIRST_CHILD.csv")
     for (year in CURRENT_YEAR until DOOMSDAY){
         if(!simulator.hasNext()) break
         val result = simulator.next()
-        val trait1 = result.hasTrait(1.0).format(2)
-        val trait2 = result.hasTrait(2.0).format(2)
-        val trait3 = result.hasTrait(3.0).format(2)
-        fileWriter.write("$year,$trait1,$trait2,$trait3\n")
+        val trait1 = result.traitAverage()
+        fileWriter.write("$year,$trait1,\n")
         fileWriter.flush()
         println("Written: $year, adult population size: ${result.size}")
     }
