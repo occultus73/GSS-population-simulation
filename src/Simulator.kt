@@ -1,52 +1,34 @@
-import kotlin.math.floor
-import kotlin.random.Random
+internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : Iterator<Double> {
 
-class Simulator(private var population: List<FemaleOverForty>) : Iterator<List<FemaleOverForty>> {
+    private var currentPopulation = startingPopulation.toMutableList()
 
-    override fun hasNext() = population.isNotEmpty()
+    private var currentYear = startingYear - 1
 
-    override fun next(): List<FemaleOverForty> {
-        population = mutableListOf<FemaleOverForty>().apply {
-            population.forEach {
-                addAll(getDaughters(it))
-            }
-        }
-        return population
+    override fun next(): Double {
+        currentYear++
+        currentPopulation.toList().forEach { addChildrenToPopulation(it) }
+        currentPopulation.removeIf { it.hasDied(currentYear) }
+        return currentPopulation.traitAverage()
     }
 
-    private fun getDaughters(mother: FemaleOverForty): List<FemaleOverForty> = mutableListOf<FemaleOverForty>().apply {
-        for (i in 1..roundProbabilistically(mother.daughters)) {
-            val daughterYearOfBirth = possibleYearOfBirth(mother.yearBorn)
-            if (mother.surveyYear - daughterYearOfBirth > 41) {
-                addAll(
-                    getDaughters(
-                        FemaleOverForty(
-                            surveyYear = mother.surveyYear,
-                            yearBorn = daughterYearOfBirth,
-                            daughters = mother.daughters,
-                            trait = mother.trait
-                        )
-                    )
-                )
-            } else add(
-                FemaleOverForty(
-                    surveyYear = mother.surveyYear + 41,
-                    yearBorn = daughterYearOfBirth,
-                    daughters = mother.daughters,
-                    trait = mother.trait
-                )
-            )
+    override fun hasNext() = currentPopulation.isNotEmpty()
 
+    fun numberOfAdults() = currentPopulation.count { it.isAdult(currentYear) }
+
+    private fun List<Person>.traitAverage(): Double {
+        var average = 0.0
+        filter { it.isAdult(currentYear) }.forEach {
+            average += it.trait
+        }
+        average /= numberOfAdults()
+        return average
+    }
+
+    private fun addChildrenToPopulation(mother: Person) {
+        mother.daughters.filter { it.hasBorn(currentYear) }.forEach { daughter ->
+            if (!currentPopulation.contains(daughter)) currentPopulation.add(daughter)
+            addChildrenToPopulation(daughter)
         }
     }
-
-    private fun roundProbabilistically(numberOfDaughters: Float): Int {
-        var wholeNumberOfDaughters = numberOfDaughters.toInt()
-        val remainderNumberOfDaughters = numberOfDaughters - wholeNumberOfDaughters
-        if (Random.nextInt(100) < remainderNumberOfDaughters * 100) wholeNumberOfDaughters++
-        return wholeNumberOfDaughters
-    }
-
-    private fun possibleYearOfBirth(parentYearOfBirth: Int) = parentYearOfBirth + Random.nextInt(16, 41)
 
 }
