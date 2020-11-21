@@ -1,12 +1,13 @@
 import DataLoader.ABORTION_OK
+import DataLoader.IQ
 import DataLoader.loadSample
 
-const val CURRENT_YEAR = 2020
+const val CURRENT_YEAR = 2000
 const val DOOMSDAY = 2101
 
 fun main() {
     // See DataLoader.kt for list of traits you can study - note: only works on the number columns.
-    val sample = loadSample(traitToStudy = ABORTION_OK)
+    val sample = loadSample(traitToStudy = IQ)
     val simulator = Simulator(CURRENT_YEAR, sample)
     println("Maximum trait in sample is: ${sample.maxByOrNull { it.trait }}")
     println("Minimum trait in sample is: ${sample.minByOrNull { it.trait }}")

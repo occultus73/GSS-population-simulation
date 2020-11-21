@@ -24,7 +24,7 @@ internal data class Person(
 
     fun hasBorn(currentYear: Int): Boolean = age(currentYear) >= 0
 
-    fun hasDied(currentYear: Int): Boolean = age(currentYear) <= US_LIFE_EXPECTANCY
+    fun hasDied(currentYear: Int): Boolean = age(currentYear) >= US_LIFE_EXPECTANCY
 
     fun isAdult(currentYear: Int): Boolean = age(currentYear) >= US_VOTING_AGE
 
