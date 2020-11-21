@@ -25,27 +25,25 @@ import DataLoader.YEARS_IN_SCHOOL
 import DataLoader.loadSample
 import java.io.FileWriter
 
-const val CURRENT_YEAR = 1947
+const val CURRENT_YEAR = 1945
 const val DOOMSDAY = 2100
 
 fun main() {
     // See DataLoader.kt for list of traits you can study - note: only works on the number columns.
-    val sample = loadSample(traitToStudy = AGE_AT_FIRST_CHILD)
+    val sample = loadSample(traitToStudy = GAY_MARRIAGE_OK)
     val simulator = Simulator(CURRENT_YEAR, sample)
 //    println("Maximum trait in sample is: ${sample.maxByOrNull { it.trait }}")
 //    println("Minimum trait in sample is: ${sample.minByOrNull { it.trait }}")
 //    return
-    val fileWriter = FileWriter("AGE_AT_FIRST_CHILD.csv")
+    val fileWriter = FileWriter("GAY_MARRIAGE_OK.csv")
     for (year in CURRENT_YEAR until DOOMSDAY){
         if(!simulator.hasNext()) break
         val result = simulator.next()
         val trait1 = result.traitAverage()
-        fileWriter.write("$year,$trait1,\n")
+        fileWriter.write("$year,$trait1\n")
         fileWriter.flush()
         println("Written: $year, adult population size: ${result.size}")
     }
     println("Maximum trait in sample is: ${sample.maxByOrNull { it.trait }}")
     println("Minimum trait in sample is: ${sample.minByOrNull { it.trait }}")
 }
-
-fun Double.format(digits: Int) = "%.${digits}f".format(this)
