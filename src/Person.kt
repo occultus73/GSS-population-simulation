@@ -7,7 +7,7 @@ internal data class Person(
     val trait: Double
 ) {
 
-    val daughters: List<Person> by lazy {
+    val children: List<Person> by lazy {
         mutableListOf<Person>().apply {
             for (birthOrder in 0 until roundNumberOfChildren()) {
                 add(

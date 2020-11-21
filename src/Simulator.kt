@@ -25,9 +25,9 @@ internal class Simulator(startingYear: Int, startingPopulation: List<Person>) : 
     }
 
     private fun addChildrenToPopulation(mother: Person) {
-        mother.daughters.filter { it.hasBorn(currentYear) }.forEach { daughter ->
-            if (!currentPopulation.contains(daughter)) currentPopulation.add(daughter)
-            addChildrenToPopulation(daughter)
+        mother.children.filter { it.hasBorn(currentYear) }.forEach { child ->
+            if (!currentPopulation.contains(child)) currentPopulation.add(child)
+            addChildrenToPopulation(child)
         }
     }
 

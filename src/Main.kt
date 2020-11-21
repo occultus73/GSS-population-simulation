@@ -2,7 +2,7 @@ import DataLoader.ABORTION_OK
 import DataLoader.loadSample
 
 const val CURRENT_YEAR = 2020
-const val DOOMSDAY = 2100
+const val DOOMSDAY = 2101
 
 fun main() {
     // See DataLoader.kt for list of traits you can study - note: only works on the number columns.
