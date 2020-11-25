@@ -1,17 +1,17 @@
 import kotlin.random.Random
 
-internal class Person(
+internal class American(
     val yearBorn: Int,
     val numberOfChildren: Float,
     val ageAtFirstChild: Int,
     val trait: Double
 ) {
 
-    val children: List<Person> by lazy {
-        mutableListOf<Person>().apply {
+    val children: List<American> by lazy {
+        mutableListOf<American>().apply {
             for (birthOrder in 0 until roundNumberOfChildren()) {
                 add(
-                    Person(
+                    American(
                         yearBorn = yearBorn + ageAtFirstChild + birthOrder * US_AVERAGE_AGE_GAP_NEXT_SIBLING,
                         numberOfChildren = numberOfChildren,
                         ageAtFirstChild = ageAtFirstChild,
