@@ -1,7 +1,13 @@
+package business
+
 import kotlin.random.Random
 
-internal class American(
+class American(
     val yearBorn: Int,
+    val ageAtSurvey: Int,
+    val iq: Float,
+    val race: Int,
+    val sex: Int,
     val numberOfChildren: Float,
     val ageAtFirstChild: Int,
     val trait: Double
@@ -13,6 +19,10 @@ internal class American(
                 add(
                     American(
                         yearBorn = yearBorn + ageAtFirstChild + birthOrder * US_AVERAGE_AGE_GAP_NEXT_SIBLING,
+                        ageAtSurvey = ageAtSurvey,
+                        iq = iq,
+                        race = race,
+                        sex = sex,
                         numberOfChildren = numberOfChildren,
                         ageAtFirstChild = ageAtFirstChild,
                         trait = trait

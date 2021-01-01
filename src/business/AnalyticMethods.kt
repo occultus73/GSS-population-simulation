@@ -1,11 +1,13 @@
+package business
+
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
-internal object AnalyticMethods {
+object AnalyticMethods {
 
-    fun List<American>.traitAverage(): Deferred<Double> {
+    fun List<American>.traitAverageAsync(): Deferred<Double> {
         return GlobalScope.async(Dispatchers.Default) {
             var average = 0.0
             forEach {
@@ -17,7 +19,18 @@ internal object AnalyticMethods {
     }
 
     fun List<American>.percentageHasTraitAsync(vararg trait: Double): Deferred<Double> {
-        return GlobalScope.async(Dispatchers.Default) {  count { person -> trait.any { it == person.trait } }.toDouble() / size }
+        return GlobalScope.async(Dispatchers.Default) { count { american -> trait.any { it == american.trait } }.toDouble() / size }
+    }
+
+    fun List<American>.averageIQforTrait(vararg trait: Double): Deferred<Double> {
+        return GlobalScope.async(Dispatchers.Default) {
+            var average = 0.0
+            val size = filter { american -> trait.any { it == american.trait } }.onEach {
+                average += it.iq
+            }.count()
+            average /= size
+            average
+        }
     }
 
     fun List<American>.mostCommonPerson() {
@@ -28,6 +41,7 @@ internal object AnalyticMethods {
     }
 
     private data class Key(val numberOfChildren: Float, val ageAtFirstChild: Int, val trait: Double)
+
     private fun American.toKey() = Key(numberOfChildren, ageAtFirstChild, trait)
 
 }

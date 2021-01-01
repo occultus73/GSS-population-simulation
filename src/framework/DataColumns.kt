@@ -1,7 +1,6 @@
-import java.io.BufferedReader
-import java.io.FileReader
+package framework
 
-internal object DataLoader {
+ object DataColumns {
 
     const val SURVEY_YEAR = 0  // ranges from 1972 to 2018
     const val YEAR_BORN = 1  // ranges from 1883 to 1977 for 41+
@@ -154,85 +153,5 @@ internal object DataLoader {
     const val DIVORCED = 148
     const val WIDOWED = 149
     const val AGE_AT_FIRST_CHILD = 150
-
-    fun loadSample(traitToStudy: Int, loadAll: Boolean = false): List<American> = mutableListOf<American>().also { list ->
-        println("Loading Sample For Trait: $traitToStudy")
-        val fileReader = BufferedReader(FileReader("GSS_fertility_data.csv"))
-        var line: String? = fileReader.readLine()
-        var count = 0
-        while (line != null) {
-            count++
-            val tokens = line.split(",")
-            val femaleNormalCondition = !loadAll
-                    && tokens[CHILDREN_OF_FEMALE_OVER_41].isNotEmpty()
-                    && tokens[AGE_AT_FIRST_CHILD] != "NA"
-                    && tokens[AGE_AT_FIRST_CHILD] != "DK"
-                    && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_FEMALE_OVER_41].toInt() > 0)
-                    && tokens[traitToStudy].isNotEmpty()
-            val femaleLoadAllCondition = loadAll
-                    && tokens[FEMALE].isNotEmpty()
-                    && tokens[YEAR_BORN].toIntOrNull() != null
-                    && tokens[traitToStudy].isNotEmpty()
-            val maleNormalCondition = !loadAll
-                    && tokens[CHILDREN_OF_MALE_OVER_44].isNotEmpty()
-                    && tokens[AGE_AT_FIRST_CHILD] != "NA"
-                    && tokens[AGE_AT_FIRST_CHILD] != "DK"
-                    && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_MALE_OVER_44].toInt() > 0)
-                    && tokens[traitToStudy].isNotEmpty()
-            val maleLoadAllCondition = loadAll
-                    && tokens[MALE].isNotEmpty()
-                    && tokens[YEAR_BORN].toIntOrNull() != null
-                    && tokens[traitToStudy].isNotEmpty()
-            if ((femaleLoadAllCondition && femaleNormalCondition)
-                || (maleLoadAllCondition && maleNormalCondition)
-                || (femaleLoadAllCondition && maleLoadAllCondition)
-                || (femaleNormalCondition && maleNormalCondition) ){
-                throw Exception("Impossible condition")
-            }
-            when {
-                femaleNormalCondition -> try {
-                    list.add(
-                        American(
-                            yearBorn = tokens[YEAR_BORN].toInt(),
-                            numberOfChildren = tokens[CHILDREN_OF_FEMALE_OVER_41].toFloat() / 2,
-                            ageAtFirstChild = tokens[AGE_AT_FIRST_CHILD].toIntOrNull() ?: 0,
-                            trait = tokens[traitToStudy].toDouble()
-                        )
-                    )
-                } catch (t: Throwable) {
-                    println("Caught exception reading line: $count")
-                    t.printStackTrace()
-                }
-                maleNormalCondition -> try {
-                    list.add(
-                        American(
-                            yearBorn = tokens[YEAR_BORN].toInt(),
-                            numberOfChildren = tokens[CHILDREN_OF_MALE_OVER_44].toFloat() / 2,
-                            ageAtFirstChild = tokens[AGE_AT_FIRST_CHILD].toIntOrNull() ?: 0,
-                            trait = tokens[traitToStudy].toDouble()
-                        )
-                    )
-                } catch (t: Throwable) {
-                    println("Caught exception reading line: $count")
-                    t.printStackTrace()
-                }
-                femaleLoadAllCondition || maleLoadAllCondition -> try {
-                    list.add(
-                        American(
-                            yearBorn = tokens[YEAR_BORN].toInt(),
-                            numberOfChildren = 0f,
-                            ageAtFirstChild = 0,
-                            trait = tokens[traitToStudy].toDouble()
-                        )
-                    )
-                } catch (t: Throwable) {
-                    println("Caught exception reading line: $count")
-                    t.printStackTrace()
-                }
-            }
-            line = fileReader.readLine()
-        }
-        fileReader.close()
-    }
 
 }
