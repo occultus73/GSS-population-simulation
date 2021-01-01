@@ -9,12 +9,7 @@ object AnalyticMethods {
 
     fun List<American>.traitAverageAsync(): Deferred<Double> {
         return GlobalScope.async(Dispatchers.Default) {
-            var average = 0.0
-            forEach {
-                average += it.trait
-            }
-            average /= size
-            average
+            map { it.trait }.average()
         }
     }
 
@@ -24,12 +19,7 @@ object AnalyticMethods {
 
     fun List<American>.averageIQforTrait(vararg trait: Double): Deferred<Double> {
         return GlobalScope.async(Dispatchers.Default) {
-            var average = 0.0
-            val size = filter { american -> trait.any { it == american.trait } }.onEach {
-                average += it.iq
-            }.count()
-            average /= size
-            average
+            filter { american -> trait.any { it == american.trait } }.map { it.iq }.average()
         }
     }
 
