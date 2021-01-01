@@ -138,17 +138,17 @@ object Main {
         }
         proportionWhiteFileWriter.run {
             write("$year")
-            write(",${heritabilityResult.run { count { it.race == 1 } / size }}")
-            write(",${idealizedResult.run { count { it.race == 1 } / size }}")
-            write(",${sterileResult?.run { count { it.race == 1 } / size }}")
+            write(",${heritabilityResult.run { count { it.race == 1 }.toDouble() / size }}")
+            write(",${idealizedResult.run { count { it.race == 1 }.toDouble() / size }}")
+            write(",${sterileResult?.run { count { it.race == 1 }.toDouble() / size }}")
             write("\n")
             flush()
         }
         proportionMenFileWriter.run {
             write("$year")
-            write(",${heritabilityResult.run { count { it.sex == 1 } / size }}")
-            write(",${idealizedResult.run { count { it.sex == 1 } / size }}")
-            write(",${sterileResult?.run { count { it.sex == 1 } / size }}")
+            write(",${heritabilityResult.run { count { it.sex == 1 }.toDouble() / size }}")
+            write(",${idealizedResult.run { count { it.sex == 1 }.toDouble() / size }}")
+            write(",${sterileResult?.run { count { it.sex == 1 }.toDouble() / size }}")
             write("\n")
             flush()
         }
