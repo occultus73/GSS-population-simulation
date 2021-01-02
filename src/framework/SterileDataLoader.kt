@@ -2,6 +2,7 @@ package framework
 
 import business.American
 import framework.DataColumns.AGE
+import framework.DataColumns.AGE_AT_FIRST_CHILD
 import framework.DataColumns.IQ
 import framework.DataColumns.YEAR_BORN
 
@@ -23,7 +24,7 @@ class SterileDataLoader(traitToStudy: Int) : DataLoader(traitToStudy) {
             race = getRace(tokens),
             sex = getSex(tokens),
             numberOfChildren = 0f,
-            ageAtFirstChild = 0,
+            ageAtFirstChild = tokens[AGE_AT_FIRST_CHILD].toIntOrNull() ?: 0,
             trait = tokens[traitToStudy].toDouble()
         )
     }

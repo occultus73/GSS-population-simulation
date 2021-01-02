@@ -122,9 +122,9 @@ object Main {
         }
         averageAgeAtFirstChildFileWriter.run {
             write("$year")
-            write(",${heritabilityResult.map { it.ageAtFirstChild }.average()}")
-            write(",${idealizedResult.map { it.ageAtFirstChild }.average()}")
-            write(",${sterileResult?.map { it.ageAtFirstChild }?.average()}")
+            write(",${heritabilityResult.filter{ it.ageAtFirstChild != 0 }.map { it.ageAtFirstChild }.average()}")
+            write(",${idealizedResult.filter{ it.ageAtFirstChild != 0 }.map { it.ageAtFirstChild }.average()}")
+            write(",${sterileResult?.filter{ it.ageAtFirstChild != 0 }?.map { it.ageAtFirstChild }?.average()}")
             write("\n")
             flush()
         }

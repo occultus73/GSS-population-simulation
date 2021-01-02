@@ -14,7 +14,7 @@ class HeritabilityDataLoader(traitToStudy: Int) : DataLoader(traitToStudy) {
         return tokens[CHILDREN_OF_MALE_OVER_44].toIntOrNull() != null
                 && tokens[AGE].toIntOrNull() != null
                 && tokens[IQ].toFloatOrNull() != null
-                && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_MALE_OVER_44].toInt() > 0)
+                && (tokens[AGE_AT_FIRST_CHILD].toIntOrNull() != null || tokens[CHILDREN_OF_MALE_OVER_44].toInt() == 0)
                 && tokens[traitToStudy].toDoubleOrNull() != null
     }
 
@@ -22,7 +22,7 @@ class HeritabilityDataLoader(traitToStudy: Int) : DataLoader(traitToStudy) {
         return tokens[CHILDREN_OF_FEMALE_OVER_41].toIntOrNull() != null
                 && tokens[AGE].toIntOrNull() != null
                 && tokens[IQ].toFloatOrNull() != null
-                && !(tokens[AGE_AT_FIRST_CHILD].toIntOrNull() == null && tokens[CHILDREN_OF_FEMALE_OVER_41].toInt() > 0)
+                && (tokens[AGE_AT_FIRST_CHILD].toIntOrNull() != null || tokens[CHILDREN_OF_FEMALE_OVER_41].toInt() == 0)
                 && tokens[traitToStudy].toDoubleOrNull() != null
     }
 
